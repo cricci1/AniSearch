@@ -63,7 +63,6 @@ export default function AnimeByID() {
     }
 
     const { data: animeData } = data;
-    console.log(animeData)
 
     return (
         <>

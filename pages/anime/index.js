@@ -1,6 +1,3 @@
-import { Container, Row, Col, Card } from "react-bootstrap";
-import { useEffect, useState } from "react";
-
 export default function Anime() {
 
     return (

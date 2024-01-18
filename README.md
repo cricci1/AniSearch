@@ -1,6 +1,8 @@
 # AniSearch
 
-![image](./public/logo.png)
+<p align="center" width="100%">
+    <img  src="./public/logo-small.png">
+</p>
 
 AniSearch is a Anime Database Website created using NextJS, React, Bootstrap, CSS and the [Jikan API](https://jikan.moe/).
 
