@@ -1,14 +1,16 @@
-import { Container, Row, Col, Button, Card, Navbar } from "react-bootstrap"
+import { Container, Row, Col, Button, Card } from "react-bootstrap"
+import Image from 'next/image'
 
 export default function Home() {
   return (
     <>
     <Container className="justify-content-center text-center">
-    <img alt="" src="logo.png" width="400" height="400" className="d-inline-block align-top"/>{' '}
+    <Image src="/logo.png" width="400" height="400"></Image>
     <br />
     <br />
     <h1>AniSearch</h1>
     <h3>Your one stop shop for everything Anime and Manga related!</h3>
+    <p>**Site is still being worked on. Everything is subject to change.**</p>
     </Container>
     <br />
     <Container>
@@ -21,7 +23,7 @@ export default function Home() {
           <Card.Text>
           Write Something Here
           </Card.Text>
-          <Button variant="primary">View Anime</Button>
+          <Button href="/anime" variant="primary">View Anime</Button>
         </Card.Body>
       </Card>
       </Col>
@@ -33,7 +35,7 @@ export default function Home() {
           <Card.Text>
             Write Something Here
           </Card.Text>
-          <Button variant="primary">View Manga</Button>
+          <Button href="/manga" variant="primary">View Manga</Button>
         </Card.Body>
       </Card>
       </Col>
@@ -45,7 +47,7 @@ export default function Home() {
           <Card.Text>
           Write Something Here
           </Card.Text>
-          <Button variant="primary">View Characters</Button>
+          <Button href="/characters" variant="primary">View Characters</Button>
         </Card.Body>
       </Card>
       </Col>
@@ -57,7 +59,7 @@ export default function Home() {
           <Card.Text>
           Write Something Here
           </Card.Text>
-          <Button variant="primary">View People</Button>
+          <Button href="/people" variant="primary">View People</Button>
         </Card.Body>
       </Card>
       </Col>
