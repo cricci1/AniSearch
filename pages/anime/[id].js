@@ -20,12 +20,12 @@ export default function AnimeByID() {
     const router = useRouter();
     const { id } = router.query;
 
+    // Fetches overview data from the Jikan API
     const fetcher = (url) => fetch(url).then((res) => res.json());
     const { data } = useSWR(id ? `https://api.jikan.moe/v4/anime/${id}/full` : null, fetcher);
 
+    // Checks if the section is set to either Characters, Staff, or Episodes and if the data is already loaded. If not, it loads the data.
     async function getAdditionalAPIData(section) {
-
-        console.log(staffData)
 
         if (section === "Characters" && characterData.length === 0) {
 
@@ -45,6 +45,7 @@ export default function AnimeByID() {
         }
     }
 
+    // If the data is not found, returns a 404 page.
     if (data && data.error) {
         return (
             <>
@@ -54,6 +55,7 @@ export default function AnimeByID() {
         );
     }
 
+    // While the data is still being fetched, returns a loading spinner.
     if (!data) {
         return (
             <Spinner animation="border" role="status">
@@ -64,41 +66,43 @@ export default function AnimeByID() {
 
     const { data: animeData } = data;
 
+    console.log(animeData)
+    console.log(characterData)
+    console.log(staffData)
+    console.log(episodeData)
+
     return (
         <>
         <Container>
             <Row className="gy-4">
                 <Col lg={3}>
-                    <img src={data.data.images.jpg.large_image_url} width="300px" height="466px"/>
-                    <br/>
-                    <br/>
+                    <img src={animeData.images.jpg.large_image_url} width="300px" height="466px"/>
+                    <br/><br/>
                     <h4><u>Information</u></h4>
-                    {animeData.type ? <><p><b>Type:</b> {animeData.type}</p></> : <></>}
-                    {animeData.episodes ? <><p><b>Episodes:</b> {animeData.episodes}</p></> : <></>}
-                    {animeData.status ? <><p><b>Status:</b> {animeData.status}</p></> : <></>}
-                    {animeData.aired.string ? <><p><b>Aired:</b> {animeData.aired.string}</p></> : <></>}
-                    {animeData.season ? <><p><b>Premiered:</b> {animeData.season} {animeData.year}</p></> : <></>}
-                    {animeData.broadcast.string ? <><p><b>Broadcast:</b> {animeData.broadcast.string}</p></> : <></>}
-                    {animeData.producers && animeData.producers.length > 0 ? <p><b>Producers:</b> {animeData.producers.map((producer) => producer.name).join(', ')}</p> : <></>}
-                    {animeData.licensors && animeData.licensors.length > 0 ? <p><b>Licensors:</b> {animeData.licensors.map((licensors) => licensors.name).join(', ')}</p> : <></>}
-                    {animeData.studios && animeData.studios.length > 0 ? <p><b>Studios:</b> {animeData.studios.map((studios) => studios.name).join(', ')}</p> : <></>}
-                    {animeData.source ? <><p><b>Source:</b> {animeData.source}</p></> : <></>}
-                    {animeData.genres && animeData.genres.length > 0 ? <p><b>Genres:</b> {animeData.genres.map((genres) => genres.name).join(', ')}</p> : <></>}
-                    {animeData.themes && animeData.themes.length > 0 ? <p><b>Themes:</b> {animeData.themes.map((themes) => themes.name).join(', ')}</p> : <></>}
-                    {animeData.duration ? <><p><b>Duration:</b> {animeData.duration}</p></> : <></>}
-                    {animeData.rating ? <><p><b>Rating:</b> {animeData.rating}</p></> : <></>}
+                    <p><b>Type: </b>{animeData.type ? <>{animeData.type}</> : <>Unknown</>}</p>
+                    <p><b>Episodes: </b>{animeData.episodes ? <>{animeData.episodes}</> : <>Unknown</>}</p>
+                    <p><b>Status: </b>{animeData.status ? <>{animeData.status}</> : <>Unknown</>}</p>
+                    <p><b>Aired: </b>{animeData.aired.string ? <>{animeData.aired.string}</> : <>Unknown</>}</p>
+                    <p><b>Premiered: </b>{animeData.season ? <>{animeData.season} {animeData.year}</> : <>Unknown</>}</p>
+                    <p><b>Broadcast: </b>{animeData.broadcast.string ? <>{animeData.broadcast.string}</> : <>Unknown</>}</p>
+                    <p><b>Producers: </b>{animeData.producers.length > 0 ? <>{animeData.producers.map((producer) => producer.name).join(', ')}</> : <>Unknown</>}</p>
+                    <p><b>Licensors: </b>{animeData.licensors && animeData.licensors.length > 0 ? <>{animeData.licensors.map((licensors) => licensors.name).join(', ')}</> : <>Unknown</>}</p>
+                    <p><b>Studios: </b>{animeData.studios.length > 0 ? <>{animeData.studios.map((studios) => studios.name).join(', ')}</> : <>Unknown</>}</p>
+                    <p><b>Source: </b>{animeData.source ? <>{animeData.source}</> : <>Unknown</>}</p>
+                    <p><b>Genres: </b>{animeData.genres.length > 0 ? <>{animeData.genres.map((genres) => genres.name).join(', ')}</> : <>Unknown</>}</p>
+                    <p><b>Themes: </b>{animeData.themes.length > 0 ? <>{animeData.themes.map((themes) => themes.name).join(', ')}</> : <>Unknown</>}</p>
+                    <p><b>Duration: </b>{animeData.duration ? <>{animeData.duration}</> : <>Unknown</>}</p>
+                    <p><b>Rating: </b>{animeData.rating ? <>{animeData.rating}</> : <>Unknown</>}</p>
                     <h5><u>Statistics</u></h5>
-                    {animeData.score ? <><p><b>Score:</b> {animeData.score} (scored by {animeData.scored_by} MAL users)</p></> : <></>}
-                    {animeData.rank ? <><p><b>Ranked:</b> #{animeData.rank}</p></> : <></>}
-                    {animeData.popularity ? <><p><b>Popularity:</b> #{animeData.popularity}</p></> : <></>}
-                    {animeData.members ? <><p><b>Members:</b> {animeData.members}</p></> : <></>}
-                    {animeData.favorites ? <><p><b>Favorites:</b> {animeData.favorites}</p></> : <></>}
+                    <p><b>Score: </b>{animeData.score ? <>{animeData.score} (scored by {animeData.scored_by} MAL users)</> : <>N/A</>}</p>
+                    <p><b>Ranked: </b>{animeData.rank ? <>#{animeData.rank}</> : <>N/A</>}</p>
+                    <p><b>Popularity: </b>{animeData.popularity ? <>#{animeData.popularity}</> : <>N/A</>}</p>
+                    <p><b>Members: </b>{animeData.members ? <>{animeData.members}</> : <>N/A</>}</p>
+                    <p><b>Favorites: </b>{animeData.favorites ? <>{animeData.favorites}</> : <>N/A</>}</p>
                 </Col>
                 <Col lg={8}>
                 {animeData.title ? <><h1>{animeData.title}</h1></> : <></>}
-                {animeData.title_english && animeData.title_japanese && (
-                    <p><b>English:</b> {animeData.title_english}, <b>Japanese:</b> {animeData.title_japanese}</p>
-                )}
+                {animeData.title_english && animeData.title_japanese && (<p><b>English:</b> {animeData.title_english}, <b>Japanese:</b> {animeData.title_japanese}</p>)}
                 <Button onClick={() => {handleSectionClick('overview')}}>Overview</Button>
                 &nbsp;
                 <Button onClick={() => {handleSectionClick('characters'); getAdditionalAPIData("Characters");}}>Characters</Button>
@@ -115,35 +119,61 @@ export default function AnimeByID() {
                     <h4><u>Background</u></h4>
                     {animeData.background ? <><p>{animeData.background}</p></> : <><p>No background information has been added to this title.</p></>}
                     <h4><u>Related Anime</u></h4>
-                    <p>WORK IN PROGRESS ✍️(◔◡◔)</p>
+                    {animeData.relations ? <>{animeData.relations.map((relation, relationIndex) => (
+                        <>
+                        <b>{relation.relation}: </b>
+                        {relation.entry.map((entry) => entry.name).join(', ')} 
+                        <br />
+                        </> 
+                    ))}</> : <><p>No related anime has been added to this title.</p></>}
+                    
+                    <br/>
                     <Row className="gy-4">
                         <Col lg={6}>
-                        <h4><u>Opening Theme</u></h4>
-                        {animeData.theme.openings ? <p>{animeData.theme.openings}</p> : <></>}
+                        {animeData.theme.openings ? (
+                            <>
+                            <h4><u>Opening Theme</u></h4>
+                            <p>{animeData.theme.openings.map((opening) => (<span key={opening}>{opening}<br /></span>))}</p>
+                            </>
+                            ) : 
+                            <>
+                            <h4><u>Opening Theme</u></h4>
+                            <p>No Information Found.</p>
+                            </>
+                        }
                         </Col>
                         <Col lg={6}>
-                        <h4><u>Ending Theme</u></h4>
-                        {animeData.theme.endings ? <p>{animeData.theme.endings}</p> : <></>}
+                        {animeData.theme.endings ? (
+                            <>
+                            <h4><u>Ending Theme</u></h4>
+                            <p>{animeData.theme.endings.map((ending) => (<span key={ending}>{ending}<br /></span>))}</p>
+                            </>
+                            ) : 
+                            <>
+                            <h4><u>Ending Theme</u></h4>
+                            <p>No Information Found.</p>
+                            </>
+                        }
                         </Col>
                     </Row>
                     </>
                 )}
 
-                {activeSection === 'characters' && (
+                {activeSection == 'characters' && (
                     <>
                     <h1>Characters</h1>
                     <h3>Work in Progress</h3>
                     </>
                 )}
 
-                {activeSection === 'staff' && (
+                {activeSection == 'staff' && (
                     <>
                     <h1>Staff</h1>
                     <h3>Work in Progress</h3>
                     </>
                 )}
 
-                {activeSection === 'episodes' && (
+                {activeSection == 'episodes' && (
                     <>
                     <h1>Episodes</h1>
                     <h3>Work in Progress</h3>
