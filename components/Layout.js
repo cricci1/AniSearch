@@ -12,10 +12,10 @@ export default function Layout(props) {
       <br />
       <Container>
         {props.children}
+        <SpeedInsights/>
       </Container>
       <br />
       <br />
-      <SpeedInsights/>
       <Footer />
     </>
   )
