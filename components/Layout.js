@@ -8,7 +8,6 @@ export default function Layout(props) {
   return (
     <>
       <MainNav />
-      <SpeedInsights/>
       <Analytics />
       <br />
       <Container>
@@ -16,6 +15,7 @@ export default function Layout(props) {
       </Container>
       <br />
       <br />
+      <SpeedInsights/>
       <Footer />
     </>
   )
