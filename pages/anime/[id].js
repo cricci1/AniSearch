@@ -3,6 +3,9 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from 'swr';
+import CharacterCard from "@/components/CharacterCard";
+import EpisodeCard from "@/components/EpisodeCard";
+import StaffCard from "@/components/StaffCard";
 
 export default function AnimeByID() {
     
@@ -66,15 +69,10 @@ export default function AnimeByID() {
 
     const { data: animeData } = data;
 
-    console.log(animeData)
-    console.log(characterData)
-    console.log(staffData)
-    console.log(episodeData)
-
     return (
         <>
         <Container>
-            <Row className="gy-4">
+            <Row>
                 <Col lg={3}>
                     <img src={animeData.images.jpg.large_image_url} width="300px" height="466px"/>
                     <br/><br/>
@@ -114,6 +112,7 @@ export default function AnimeByID() {
                 <br />
                 {activeSection === 'overview' && (
                     <>
+                    <h2>Overview</h2>
                     <h4><u>Synopsis</u></h4>
                     {animeData.synopsis ? <><p>{animeData.synopsis}</p></> : <><p>No synopsis information has been added to this title.</p></>}
                     <h4><u>Background</u></h4>
@@ -161,24 +160,47 @@ export default function AnimeByID() {
 
                 {activeSection == 'characters' && (
                     <>
-                    <h1>Characters</h1>
-                    <h3>Work in Progress</h3>
+                    <h2>Characters</h2>
+                    <br/>
+                    <Row className="gy-4">
+                        {characterData.map((character, index) => (
+                            <Col lg={3} key={index}>
+                                <CharacterCard character={character}/>
+                            </Col>
+                        ))}
+                    </Row>
+                    <br/>
                     </>
                 )}
 
                 {activeSection == 'staff' && (
                     <>
-                    <h1>Staff</h1>
-                    <h3>Work in Progress</h3>
+                    <h2>Staff</h2>
+                    <br/>
+                    <Row className="gy-4">
+                        {staffData.map((staffMember, index) => (
+                            <Col lg={3} key={index}>
+                                <StaffCard staffMember={staffMember}/>
+                            </Col>
+                        ))}
+                    </Row>
                     </>
                 )}
 
                 {activeSection == 'episodes' && (
                     <>
-                    <h1>Episodes</h1>
-                    <h3>Work in Progress</h3>
+                    <h2>Episodes ({episodeData.length})</h2>
+                    <br />
+                    <Row className="gy-4">
+                        {episodeData.map((episode, index) => (
+                            <Col lg={12} key={index}>
+                                <EpisodeCard episode={episode} index={index}/>
+                            </Col>
+                        ))}
+                    </Row>
                     </>
                 )}
+
                 </Col>
             </Row>
         </Container>
