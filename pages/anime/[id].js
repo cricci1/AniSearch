@@ -1,11 +1,12 @@
 import { Button, Container, Row, Col } from "react-bootstrap";
-import Spinner from 'react-bootstrap/Spinner';
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from 'swr';
 import CharacterCard from "@/components/CharacterCard";
 import EpisodeCard from "@/components/EpisodeCard";
 import StaffCard from "@/components/StaffCard";
+import Loading from "@/components/Loading";
+import NoData from "@/components/NoData";
 
 export default function AnimeByID() {
     
@@ -22,12 +23,9 @@ export default function AnimeByID() {
     
     const router = useRouter();
     const { id } = router.query;
-
-    // Fetches overview data from the Jikan API
     const fetcher = (url) => fetch(url).then((res) => res.json());
     const { data } = useSWR(id ? `https://api.jikan.moe/v4/anime/${id}/full` : null, fetcher);
 
-    // Checks if the section is set to either Characters, Staff, or Episodes and if the data is already loaded. If not, it loads the data.
     async function getAdditionalAPIData(section) {
 
         if (section === "Characters" && characterData.length === 0) {
@@ -42,28 +40,21 @@ export default function AnimeByID() {
 
         } else if (section === "Episodes" && episodeData.length === 0) {
 
-            const { data: episodesData } = await fetch(`https://api.jikan.moe/v4/anime/${id}/episodes`).then((res) => res.json());
-            setEpisodeData(episodesData)
+            const { data: episodeData } = await fetch(`https://api.jikan.moe/v4/anime/${id}/episodes`).then((res) => res.json());
+            setEpisodeData(episodeData)
 
         }
     }
 
-    // If the data is not found, returns a 404 page.
     if (data && data.error) {
         return (
-            <>
-                <h1>No Data Found!</h1>
-                <h4>Are you sure the ID you entered was correct?</h4>
-            </>
+        <NoData />
         );
     }
 
-    // While the data is still being fetched, returns a loading spinner.
     if (!data) {
         return (
-            <Spinner animation="border" role="status">
-                <span className="visually-hidden">Loading...</span>
-            </Spinner>
+        <Loading />
         );
     }
 
@@ -71,6 +62,7 @@ export default function AnimeByID() {
 
     return (
         <>
+        <title>{animeData.title} - AniSearch</title>
         <Container>
             <Row>
                 <Col lg={3}>
@@ -125,7 +117,6 @@ export default function AnimeByID() {
                         <br />
                         </> 
                     ))}</> : <><p>No related anime has been added to this title.</p></>}
-                    
                     <br/>
                     <Row className="gy-4">
                         <Col lg={6}>
@@ -157,7 +148,6 @@ export default function AnimeByID() {
                     </Row>
                     </>
                 )}
-
                 {activeSection == 'characters' && (
                     <>
                     <h2>Characters</h2>
@@ -172,7 +162,6 @@ export default function AnimeByID() {
                     <br/>
                     </>
                 )}
-
                 {activeSection == 'staff' && (
                     <>
                     <h2>Staff</h2>
@@ -186,7 +175,6 @@ export default function AnimeByID() {
                     </Row>
                     </>
                 )}
-
                 {activeSection == 'episodes' && (
                     <>
                     <h2>Episodes ({episodeData.length})</h2>
@@ -200,7 +188,6 @@ export default function AnimeByID() {
                     </Row>
                     </>
                 )}
-
                 </Col>
             </Row>
         </Container>
