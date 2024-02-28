@@ -1,13 +1,17 @@
-import { Card, Row, Col } from 'react-bootstrap'
+import { Card } from 'react-bootstrap'
 
-export default function CharacterCard() {
+export default function CharacterCard(props) {
+
     return (
         <>
-        <Row>
-            <Col>Image</Col>
-            <Col className="justify-content-start">Character Name <br/>Voice Cast</Col>
-            <Col>Image</Col>
-        </Row>
+        <Card>
+            <Card.Img variant="top" width="100px" height="250px" src={props.character.character.images.jpg.image_url}/>
+                <Card.Body>
+                    <Card.Title>{props.character.character.name}</Card.Title>
+                    <Card.Text>{props.character.role}</Card.Text>
+            </Card.Body>
+        </Card>
         </>
     )
+
 }
